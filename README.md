@@ -30,6 +30,8 @@ Application bancaire basée sur une architecture microservices pour la gestion d
 ## Prérequis
 - JDK 17 ou supérieur
 - Maven 3.6+
+- Docker et Docker Compose (pour le déploiement conteneurisé)
+- Kubernetes/Minikube (optionnel, pour le déploiement K8s)
 
 ## Compilation
 
@@ -173,6 +175,85 @@ Accès H2 Console:
 
 Le virement-service communique avec le beneficiaire-service via **OpenFeign** pour récupérer les informations des bénéficiaires.
 
+## Déploiement avec Docker
+
+### Option 1: Déploiement avec Docker Compose
+
+1. **Build et déploiement automatique:**
+```bash
+./build.sh
+```
+
+2. **Ou manuellement:**
+```bash
+# Build Maven
+mvn clean package -DskipTests
+
+# Build Docker images et démarrer les services
+docker-compose up -d
+```
+
+3. **Vérifier les services:**
+```bash
+docker-compose ps
+```
+
+4. **Voir les logs:**
+```bash
+docker-compose logs -f [service-name]
+```
+
+5. **Arrêter les services:**
+```bash
+docker-compose down
+```
+
+### Option 2: Déploiement avec Kubernetes
+
+1. **Créer le namespace:**
+```bash
+kubectl apply -f kubernetes/namespace.yaml
+```
+
+2. **Déployer tous les services:**
+```bash
+kubectl apply -f kubernetes/
+```
+
+3. **Vérifier les déploiements:**
+```bash
+kubectl get all -n banking-microservices
+```
+
+4. **Accéder aux services:**
+```bash
+# Forward gateway port
+kubectl port-forward -n banking-microservices service/gateway-service 8080:8080
+
+# Forward discovery port
+kubectl port-forward -n banking-microservices service/discovery-service 8761:8761
+```
+
+5. **Supprimer les déploiements:**
+```bash
+kubectl delete namespace banking-microservices
+```
+
+## Pipeline CI/CD avec Jenkins
+
+Un fichier `Jenkinsfile` est fourni pour automatiser:
+- Le build Maven
+- Les tests
+- L'analyse de code (SonarQube)
+- La création d'images Docker
+- Le déploiement
+
+Pour utiliser le pipeline:
+1. Créer un nouveau pipeline dans Jenkins
+2. Pointer vers le Jenkinsfile dans le repository
+3. Configurer les credentials Docker si nécessaire
+4. Lancer le build
+
 ## Fonctionnalités Implémentées
 
 ✅ Question 1: Création du projet Maven parent avec modules
@@ -185,6 +266,7 @@ Le virement-service communique avec le beneficiaire-service via **OpenFeign** po
 ✅ Question 6: Configuration dynamique des routes du Gateway
 ✅ Question 7: Développement de virement-service avec OpenFeign
 ✅ Documentation OpenAPI/Swagger pour les APIs REST
+✅ Question 8 (DevOps): Docker, Docker Compose, Kubernetes, Jenkins Pipeline
 
 ## Structure du Projet
 
@@ -218,11 +300,30 @@ banking-microservices/
 
 ## À Venir
 
-- Chat-bot Service avec IA générative (RAG)
-- Frontend Angular
+- Chat-bot Service avec IA générative (RAG) basé sur Spring AI ou Python/Langchain
+- Frontend Angular pour l'interface web
 - Client Mobile Flutter
-- DevOps (Docker, Docker Compose, Jenkins, Kubernetes)
-- Sécurité (Spring Security, OAuth2, JWT)
+- Sécurité avec Spring Security (OAuth2, JWT, Keycloak)
+
+## Architecture DevOps Implémentée
+
+### Docker
+- Dockerfiles pour chaque microservice
+- Docker Compose pour orchestration locale
+- Images basées sur OpenJDK 17 slim
+
+### Kubernetes
+- Déploiements et Services K8s pour chaque microservice
+- Namespace dédié
+- Configuration de load balancing pour le Gateway
+- Réplication des services métier (2 replicas)
+
+### CI/CD
+- Pipeline Jenkins automatisé
+- Build Maven
+- Tests automatiques
+- Build et push d'images Docker
+- Déploiement automatique
 
 ## Auteur
 Projet de POC - Architecture Microservices

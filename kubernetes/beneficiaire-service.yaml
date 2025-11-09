@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: beneficiaire-service
+  namespace: banking-microservices
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: beneficiaire-service
+  template:
+    metadata:
+      labels:
+        app: beneficiaire-service
+    spec:
+      containers:
+      - name: beneficiaire-service
+        image: beneficiaire-service:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8081
+        env:
+        - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+          value: "http://discovery-service:8761/eureka/"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: beneficiaire-service
+  namespace: banking-microservices
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8081
+    targetPort: 8081
+  selector:
+    app: beneficiaire-service
