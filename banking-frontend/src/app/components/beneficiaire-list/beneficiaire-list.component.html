@@ -1,0 +1,71 @@
+<div class="container">
+  <h2>Gestion des Bénéficiaires</h2>
+  
+  <div class="toolbar">
+    <div class="search-box">
+      <input type="text" [(ngModel)]="searchTerm" placeholder="Rechercher par nom..." />
+      <button (click)="search()">Rechercher</button>
+      <button (click)="loadBeneficiaires()">Réinitialiser</button>
+    </div>
+    <button class="btn-add" (click)="openForm()">Nouveau Bénéficiaire</button>
+  </div>
+
+  <!-- Form Modal -->
+  <div class="modal" *ngIf="showForm">
+    <div class="modal-content">
+      <h3>{{ editMode ? 'Modifier' : 'Nouveau' }} Bénéficiaire</h3>
+      <form (ngSubmit)="saveBeneficiaire()">
+        <div class="form-group">
+          <label>Nom:</label>
+          <input type="text" [(ngModel)]="currentBeneficiaire.nom" name="nom" required />
+        </div>
+        <div class="form-group">
+          <label>Prénom:</label>
+          <input type="text" [(ngModel)]="currentBeneficiaire.prenom" name="prenom" required />
+        </div>
+        <div class="form-group">
+          <label>RIB:</label>
+          <input type="text" [(ngModel)]="currentBeneficiaire.rib" name="rib" required />
+        </div>
+        <div class="form-group">
+          <label>Type:</label>
+          <select [(ngModel)]="currentBeneficiaire.type" name="type">
+            <option value="PHYSIQUE">Physique</option>
+            <option value="MORALE">Morale</option>
+          </select>
+        </div>
+        <div class="form-actions">
+          <button type="submit">Enregistrer</button>
+          <button type="button" (click)="closeForm()">Annuler</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nom</th>
+        <th>Prénom</th>
+        <th>RIB</th>
+        <th>Type</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let beneficiaire of beneficiaires">
+        <td>{{ beneficiaire.id }}</td>
+        <td>{{ beneficiaire.nom }}</td>
+        <td>{{ beneficiaire.prenom }}</td>
+        <td>{{ beneficiaire.rib }}</td>
+        <td>{{ beneficiaire.type }}</td>
+        <td>
+          <button (click)="editBeneficiaire(beneficiaire)">Modifier</button>
+          <button (click)="deleteBeneficiaire(beneficiaire.id)">Supprimer</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

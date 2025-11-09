@@ -1,0 +1,13 @@
+<div class="app-container">
+  <nav class="navbar">
+    <h1>{{ title }}</h1>
+    <ul>
+      <li><a routerLink="/beneficiaires" routerLinkActive="active">Bénéficiaires</a></li>
+      <li><a routerLink="/virements" routerLinkActive="active">Virements</a></li>
+    </ul>
+  </nav>
+  
+  <main>
+    <router-outlet></router-outlet>
+  </main>
+</div>

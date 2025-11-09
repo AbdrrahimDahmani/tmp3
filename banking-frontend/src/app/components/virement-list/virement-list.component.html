@@ -1,0 +1,76 @@
+<div class="container">
+  <h2>Gestion des Virements</h2>
+  
+  <div class="toolbar">
+    <button class="btn-add" (click)="openForm()">Nouveau Virement</button>
+  </div>
+
+  <!-- Form Modal -->
+  <div class="modal" *ngIf="showForm">
+    <div class="modal-content">
+      <h3>{{ editMode ? 'Modifier' : 'Nouveau' }} Virement</h3>
+      <form (ngSubmit)="saveVirement()">
+        <div class="form-group">
+          <label>Bénéficiaire:</label>
+          <select [(ngModel)]="currentVirement.beneficiaireId" name="beneficiaireId" required>
+            <option *ngFor="let b of beneficiaires" [value]="b.id">{{ b.nom }} {{ b.prenom }}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>RIB Source:</label>
+          <input type="text" [(ngModel)]="currentVirement.ribSource" name="ribSource" required />
+        </div>
+        <div class="form-group">
+          <label>Montant:</label>
+          <input type="number" [(ngModel)]="currentVirement.montant" name="montant" required />
+        </div>
+        <div class="form-group">
+          <label>Description:</label>
+          <textarea [(ngModel)]="currentVirement.description" name="description" required></textarea>
+        </div>
+        <div class="form-group">
+          <label>Type:</label>
+          <select [(ngModel)]="currentVirement.type" name="type">
+            <option value="NORMAL">Normal</option>
+            <option value="INSTANTANE">Instantané</option>
+          </select>
+        </div>
+        <div class="form-actions">
+          <button type="submit">Enregistrer</button>
+          <button type="button" (click)="closeForm()">Annuler</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Bénéficiaire</th>
+        <th>RIB Source</th>
+        <th>Montant</th>
+        <th>Description</th>
+        <th>Date</th>
+        <th>Type</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let virement of virements">
+        <td>{{ virement.id }}</td>
+        <td>{{ getBeneficiaireNom(virement.beneficiaire) }}</td>
+        <td>{{ virement.ribSource }}</td>
+        <td>{{ virement.montant | number:'1.2-2' }} MAD</td>
+        <td>{{ virement.description }}</td>
+        <td>{{ virement.dateVirement | date:'short' }}</td>
+        <td>{{ virement.type }}</td>
+        <td>
+          <button (click)="editVirement(virement)">Modifier</button>
+          <button (click)="deleteVirement(virement.id)">Supprimer</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -301,9 +301,31 @@ banking-microservices/
 ## À Venir
 
 - Chat-bot Service avec IA générative (RAG) basé sur Spring AI ou Python/Langchain
-- Frontend Angular pour l'interface web
 - Client Mobile Flutter
 - Sécurité avec Spring Security (OAuth2, JWT, Keycloak)
+
+## Frontend Angular
+
+Une application web Angular complète a été développée dans le dossier `banking-frontend/`.
+
+### Fonctionnalités du Frontend:
+- Interface moderne et responsive
+- Gestion complète des bénéficiaires (CRUD)
+- Gestion complète des virements (CRUD)
+- Recherche de bénéficiaires
+- Affichage des relations entre virements et bénéficiaires
+- Navigation intuitive
+
+### Démarrage du Frontend:
+```bash
+cd banking-frontend
+npm install
+npm start
+```
+
+Accès: http://localhost:4200
+
+Voir [banking-frontend/README-FRONTEND.md](banking-frontend/README-FRONTEND.md) pour plus de détails.
 
 ## Architecture DevOps Implémentée
 
